@@ -16,43 +16,10 @@ if command -v nix >/dev/null 2>&1 && nix --version >/dev/null 2>&1; then
     exit 0
 fi
 
-echo "📦 Nix not found. Installing Nix..."
-
-# Create a temporary directory for the installation
-TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
-
-# Download the Nix installer
-echo "⬇️  Downloading Nix installer..."
-curl -L https://nixos.org/nix/install -o "$TEMP_DIR/install-nix.sh"
-
-# Verify the download was successful
-if [ ! -f "$TEMP_DIR/install-nix.sh" ]; then
-    echo "❌ Failed to download Nix installer"
-    exit 1
-fi
-
-# Make the installer executable
-chmod +x "$TEMP_DIR/install-nix.sh"
-
-# Install Nix in single-user mode (suitable for containers/codespaces)
-echo "🚀 Installing Nix (single-user mode)..."
-"$TEMP_DIR/install-nix.sh" --no-daemon
-
-# Source the Nix profile to make nix command available in current session
-if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-    echo "🔧 Sourcing Nix profile..."
-    source "$HOME/.nix-profile/etc/profile.d/nix.sh"
-fi
-
-# Verify installation
-if command -v nix >/dev/null 2>&1; then
-    echo "✅ Nix installation successful!"
-    nix --version
-else
-    echo "❌ Nix installation failed - nix command not found"
-    exit 1
-fi
+# Download the Determinate Systems Nix installer
+echo "Downloading Determinate Systems Nix installer..."
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+  sh -s -- install linux --init none --determinate --no-confirm
 
 # installing it to omyzsh config
 if [ ! -f "$HOME/.oh-my-zsh/custom/nix.sh" ]; then
