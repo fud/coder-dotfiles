@@ -39,6 +39,12 @@ chmod +x "$TEMP_DIR/install-nix.sh"
 echo "🚀 Installing Nix (single-user mode)..."
 "$TEMP_DIR/install-nix.sh" --no-daemon
 
+# Source the Nix profile to make nix command available in current session
+if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    echo "🔧 Sourcing Nix profile..."
+    source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
 # Verify installation
 if command -v nix >/dev/null 2>&1; then
     echo "✅ Nix installation successful!"
