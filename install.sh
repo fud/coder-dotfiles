@@ -39,26 +39,17 @@ chmod +x "$TEMP_DIR/install-nix.sh"
 echo "🚀 Installing Nix (single-user mode)..."
 "$TEMP_DIR/install-nix.sh" --no-daemon
 
-# Source the Nix profile to make nix command available in current session
-if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-    echo "🔧 Sourcing Nix profile..."
-    source "$HOME/.nix-profile/etc/profile.d/nix.sh"
-fi
-
 # Verify installation
 if command -v nix >/dev/null 2>&1; then
     echo "✅ Nix installation successful!"
     nix --version
-
-    # Add some useful information
-    echo ""
-    echo "📝 To use Nix in new shell sessions, run:"
-    echo "   source ~/.nix-profile/etc/profile.d/nix.sh"
-    echo ""
-    echo "💡 Or add this line to your shell's RC file (~/.bashrc, ~/.zshrc, etc.)"
 else
     echo "❌ Nix installation failed - nix command not found"
     exit 1
 fi
 
+# installing it to omyzsh config
+if [ ! -f "$HOME/.oh-my-zsh/custom/nix.sh" ]; then
+    echo "source ~/.nix-profile/etc/profile.d/nix.sh" > ~/.oh-my-zsh/custom/nix.sh
+fi
 echo "🎉 Setup complete!"
