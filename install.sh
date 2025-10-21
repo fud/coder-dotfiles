@@ -31,5 +31,6 @@ sudo chown -R vscode:vscode /nix
 echo "🎉 Setup complete!"
 
 echo "Installing flake configuration"
+source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 nix profile add .
 echo "Flake installed!"
