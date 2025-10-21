@@ -26,3 +26,9 @@ if [ ! -f "$HOME/.oh-my-zsh/custom/nix.sh" ]; then
     echo "source ~/.nix-profile/etc/profile.d/nix.sh" > ~/.oh-my-zsh/custom/nix.sh
 fi
 echo "🎉 Setup complete!"
+
+echo "Installing flake configuration"
+
+nix profile install .
+
+echo "Flake installed!"
