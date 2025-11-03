@@ -1,5 +1,5 @@
 {
-  description = "A flake for ripgrep";
+  description = "Coder configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -29,13 +29,17 @@
       in
       {
         packages = {
-          default = pkgs.ripgrep;
+          default = pkgs.buildEnv {
+            name = "coder-tools";
+            paths = [ pkgs.ripgrep pkgs.btop ];
+          };
           setup-nix-zsh = setupScript;
         };
         
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             ripgrep
+            btop
           ];
         };
       });
