@@ -40,6 +40,7 @@
           buildInputs = with pkgs; [
             ripgrep
             btop
+            pgcli
           ];
         };
       });
