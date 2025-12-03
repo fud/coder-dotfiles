@@ -31,17 +31,13 @@
         packages = {
           default = pkgs.buildEnv {
             name = "coder-tools";
-            paths = [ pkgs.ripgrep pkgs.btop ];
+            paths = with pkgs; [ 
+              ripgrep 
+              btop 
+              pgcli
+            ];
           };
           setup-nix-zsh = setupScript;
-        };
-        
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            ripgrep
-            btop
-            pgcli
-          ];
         };
       });
 }
