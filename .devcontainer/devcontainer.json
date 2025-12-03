@@ -1,4 +1,7 @@
 {
   "name": "Nix Development",
-  "image": "ghcr.io/nixos/nix:latest"  
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {}
+  }
 }
