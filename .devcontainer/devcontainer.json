@@ -1,0 +1,4 @@
+{
+  "name": "Nix Development",
+  "image": "ghcr.io/nixos/nix:latest"  
+}
