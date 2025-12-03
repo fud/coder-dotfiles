@@ -35,6 +35,7 @@
               ripgrep 
               btop 
               pgcli
+              neovim
             ];
           };
           setup-nix-zsh = setupScript;
