@@ -8,6 +8,10 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+echo "Generating locale for en_AU.UTF-8"
+
+sudo locale-gen en_AU.UTF-8
+
 echo "Checking if Nix is already installed..."
 
 if command -v nix >/dev/null 2>&1 && nix --version >/dev/null 2>&1; then
