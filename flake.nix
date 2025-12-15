@@ -26,6 +26,12 @@
             echo "oh-my-zsh Nix configuration already exists"
           fi
         '';
+
+        environment.shellAliases = {
+          vim = "nvim";
+          vi = "nvim";
+        };
+        
       in
       {
         packages = {
