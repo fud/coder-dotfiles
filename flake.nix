@@ -46,6 +46,7 @@
               pgcli
               neovim
               claude-code
+              delta
             ];
           };
           setup-nix-zsh = setupScript;
