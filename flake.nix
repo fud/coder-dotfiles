@@ -9,8 +9,11 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-        
+        pkgs = import nixpkgs {
+          inherit system;
+          config = { allowUnfree = true; };
+        };
+
         # Create oh-my-zsh nix configuration
         nixZshConfig = pkgs.writeText "nix.sh" ''
           source ~/.nix-profile/etc/profile.d/nix.sh
@@ -42,6 +45,7 @@
               btop 
               pgcli
               neovim
+              claude-code
             ];
           };
           setup-nix-zsh = setupScript;
