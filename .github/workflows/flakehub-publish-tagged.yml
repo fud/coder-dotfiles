@@ -15,6 +15,7 @@ jobs:
       - uses: DeterminateSystems/determinate-nix-action@v3
       - uses: DeterminateSystems/flakehub-push@main
         with:
-          name: DeterminateSystems/flakehub-push
+          name: "fud/coder-dotfiles"
           rolling: true
-          visibility: public
+          visibility: "unlisted"
+          include-output-paths: true
