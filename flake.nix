@@ -18,6 +18,12 @@
         nixZshConfig = pkgs.writeText "nix.sh" ''
           source ~/.nix-profile/etc/profile.d/nix.sh
         '';
+
+        # Create oh-my-zsh aliases for editor commands
+        aliasesZshConfig = pkgs.writeText "aliases.zsh" ''
+          alias vim="nvim"
+          alias vi="nvim"
+        '';
         
         # Setup script that creates the oh-my-zsh config
         setupScript = pkgs.writeShellScriptBin "setup-nix-zsh" ''
@@ -28,12 +34,14 @@
           else
             echo "oh-my-zsh Nix configuration already exists"
           fi
-        '';
 
-        environment.shellAliases = {
-          vim = "nvim";
-          vi = "nvim";
-        };
+          if [ ! -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then
+            cp ${aliasesZshConfig} "$HOME/.oh-my-zsh/custom/aliases.zsh"
+            echo "Created oh-my-zsh aliases configuration"
+          else
+            echo "oh-my-zsh aliases configuration already exists"
+          fi
+        '';
         
       in
       {
