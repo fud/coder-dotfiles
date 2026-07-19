@@ -23,6 +23,8 @@
         aliasesZshConfig = pkgs.writeText "aliases.zsh" ''
           alias vim="nvim"
           alias vi="nvim"
+          alias less="bat"
+          alias cat="bat"
         '';
         
         # Setup script that creates the oh-my-zsh config
@@ -49,12 +51,13 @@
           default = pkgs.buildEnv {
             name = "coder-tools";
             paths = with pkgs; [ 
-              ripgrep 
+              bat
               btop 
-              pgcli
-              neovim
               claude-code
               delta
+              neovim
+              pgcli
+              ripgrep 
             ];
           };
           setup-nix-zsh = setupScript;
