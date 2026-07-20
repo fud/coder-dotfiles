@@ -1,0 +1,6 @@
+{
+  "name": "coder-dotfiles",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "postCreateCommand": "bash .devcontainer/scripts/install-nix.sh",
+  "postStartCommand": "bash .devcontainer/scripts/start-nix-daemon.sh"
+}
