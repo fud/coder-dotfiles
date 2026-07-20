@@ -3,11 +3,10 @@ set -euo pipefail
 
 if command -v nix >/dev/null 2>&1; then
   echo "nix is already installed"
-  exit 0
+else
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
+    | sh -s -- install linux --init none --determinate --no-confirm
 fi
-
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
-  | sh -s -- install linux --init none --determinate --no-confirm
 
 if ! grep -q "nix-daemon.sh" "$HOME/.bashrc"; then
   echo ". /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" >> "$HOME/.bashrc"
