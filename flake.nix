@@ -38,22 +38,43 @@
           }
         '';
         
-        # Setup script that creates the oh-my-zsh config
+        # Setup script that creates/updates the oh-my-zsh config
         setupScript = pkgs.writeShellScriptBin "setup-nix-zsh" ''
           mkdir -p "$HOME/.oh-my-zsh/custom"
-          if [ ! -f "$HOME/.oh-my-zsh/custom/nix.sh" ]; then
-            cp ${nixZshConfig} "$HOME/.oh-my-zsh/custom/nix.sh"
-            echo "Created oh-my-zsh Nix configuration"
-          else
-            echo "oh-my-zsh Nix configuration already exists"
-          fi
 
-          if [ ! -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then
-            cp ${aliasesZshConfig} "$HOME/.oh-my-zsh/custom/aliases.zsh"
-            echo "Created oh-my-zsh aliases configuration"
-          else
-            echo "oh-my-zsh aliases configuration already exists"
-          fi
+          update_managed_block() {
+            local target="$1"
+            local source="$2"
+            local name="$3"
+            local start="# >>> coder-dotfiles-managed:start >>>"
+            local end="# <<< coder-dotfiles-managed:end <<<"
+            local tmp
+            tmp="$(mktemp)"
+
+            if [ ! -f "$target" ]; then
+              touch "$target"
+            fi
+
+            awk -v s="$start" -v e="$end" '
+              $0 == s { in_block=1; next }
+              $0 == e { in_block=0; next }
+              !in_block { print }
+            ' "$target" > "$tmp"
+
+            {
+              cat "$tmp"
+              [ -s "$tmp" ] && [ "$(tail -c1 "$tmp" 2>/dev/null || true)" != "" ] && printf "\n"
+              printf "%s\n" "$start"
+              cat "$source"
+              printf "%s\n" "$end"
+            } > "$target"
+
+            rm -f "$tmp"
+            echo "Updated managed $name configuration"
+          }
+
+          update_managed_block "$HOME/.oh-my-zsh/custom/nix.sh" ${nixZshConfig} "Nix"
+          update_managed_block "$HOME/.oh-my-zsh/custom/aliases.zsh" ${aliasesZshConfig} "aliases"
         '';
         
       in
