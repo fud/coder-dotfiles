@@ -25,6 +25,17 @@
           alias vi="nvim"
           alias less="bat"
           alias cat="bat"
+
+          claude() {
+            local branch
+            branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo -n unknown)"
+
+            if command -v tmux >/dev/null 2>&1; then
+              tmux rename-window "claude ($branch)" 2>/dev/null || true
+            fi
+
+            command claude "$@"
+          }
         '';
         
         # Setup script that creates the oh-my-zsh config
