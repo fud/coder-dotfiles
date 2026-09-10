@@ -37,6 +37,18 @@
             command claude "$@"
           }
         '';
+
+        tmuxZshConfig = pkgs.writeText "tmux.zsh" ''
+          if [[ -o interactive && -z "$TMUX" && -t 1 ]] && command -v tmux >/dev/null 2>&1; then
+            detached_session="$(tmux list-sessions -F '#{session_name} #{session_attached}' 2>/dev/null | awk '$2 == 0 { print $1; exit }')"
+
+            if [[ -n "$detached_session" ]]; then
+              tmux attach-session -t "$detached_session"
+            else
+              tmux new-session -s coder
+            fi
+          fi
+        '';
         
         # Setup script that creates/updates the oh-my-zsh config
         setupScript = pkgs.writeShellScriptBin "setup-nix-zsh" ''
@@ -75,6 +87,7 @@
 
           update_managed_block "$HOME/.oh-my-zsh/custom/nix.sh" ${nixZshConfig} "Nix"
           update_managed_block "$HOME/.oh-my-zsh/custom/aliases.zsh" ${aliasesZshConfig} "aliases"
+          update_managed_block "$HOME/.oh-my-zsh/custom/tmux.zsh" ${tmuxZshConfig} "tmux"
         '';
         
       in
@@ -90,6 +103,7 @@
               neovim
               pgcli
               ripgrep 
+              tmux
             ];
           };
           setup-nix-zsh = setupScript;
