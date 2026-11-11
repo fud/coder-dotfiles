@@ -17,14 +17,9 @@ The [NixOS status page](https://status.nixos.org/) shows the current operational
 
 ## Update flake.lock
 
-Update everything:
+This repo updates automatically every 7 days, on Sunday at 00:00 UTC. To trigger an update manually, go to **Actions** > **Update flake.lock** > **Run workflow**.
 
 ```bash
-nix flake update
-```
-
-Update only `nixpkgs`:
-
-```bash
-nix flake lock --update-input nixpkgs
+nix flake update # Update all inputs
+nix flake lock --update-input nixpkgs # Update only nixpkgs
 ```
