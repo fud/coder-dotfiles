@@ -108,6 +108,7 @@
               bat
               btop 
               claude-code
+              codex
               delta
               herdr.packages.${system}.default
               neovim
