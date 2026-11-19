@@ -40,6 +40,12 @@
           }
         '';
 
+        orcaZshConfig = pkgs.writeText "orca.zsh" ''
+          umask 077
+          nohup "$HOME/.local/bin/orca-recover-on-startup" \
+            >> "$HOME/.orca-recovery.log" 2>&1 < /dev/null &
+        '';
+
         tmuxZshConfig = pkgs.writeText "tmux.zsh" ''
           if [[ -o interactive && -z "$TMUX" && -t 1 ]] && command -v tmux >/dev/null 2>&1; then
             detached_session="$(tmux list-sessions -F '#{session_name} #{session_attached}' 2>/dev/null | awk '$2 == 0 { print $1; exit }')"
@@ -89,6 +95,7 @@
 
           update_managed_block "$HOME/.oh-my-zsh/custom/nix.sh" ${nixZshConfig} "Nix"
           update_managed_block "$HOME/.oh-my-zsh/custom/aliases.zsh" ${aliasesZshConfig} "aliases"
+          update_managed_block "$HOME/.oh-my-zsh/custom/orca.zsh" ${orcaZshConfig} "Orca"
           update_managed_block "$HOME/.oh-my-zsh/custom/tmux.zsh" ${tmuxZshConfig} "tmux"
         '';
         
