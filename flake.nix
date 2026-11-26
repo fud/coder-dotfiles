@@ -90,6 +90,35 @@
           update_managed_block "$HOME/.oh-my-zsh/custom/nix.sh" ${nixZshConfig} "Nix"
           update_managed_block "$HOME/.oh-my-zsh/custom/aliases.zsh" ${aliasesZshConfig} "aliases"
           update_managed_block "$HOME/.oh-my-zsh/custom/tmux.zsh" ${tmuxZshConfig} "tmux"
+
+          export PATH="$HOME/.local/bin:${pkgs.lib.makeBinPath [ herdr.packages.${system}.default pkgs.claude-code pkgs.python3 ]}:$PATH"
+
+          if command -v herdr >/dev/null 2>&1; then
+            if herdr integration status 2>/dev/null | grep -Eq '^claude: (not installed|outdated)'; then
+              herdr integration install claude && echo "updated herdr claude integration" \
+                || echo "warn: herdr claude integration install failed" >&2
+            fi
+
+            if ! herdr status server 2>/dev/null | grep -q '^status: running'; then
+              setsid nohup herdr server </dev/null >/dev/null 2>&1 &
+              attempts=0
+              until herdr status server 2>/dev/null | grep -q '^status: running'; do
+                if [ "$attempts" -ge 20 ]; then
+                  echo "warn: herdr server did not become ready" >&2
+                  break
+                fi
+                sleep 0.5
+                attempts=$((attempts + 1))
+              done
+
+              if herdr status server 2>/dev/null | grep -q '^status: running'; then
+                echo "started herdr server"
+                if [ -f "$HOME/.config/herdr/herdr-inflight.py" ]; then
+                  setsid nohup python3 "$HOME/.config/herdr/herdr-inflight.py" resume </dev/null >/dev/null 2>&1 &
+                fi
+              fi
+            fi
+          fi
         '';
         
       in

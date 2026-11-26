@@ -18,24 +18,24 @@ if command -v nix >/dev/null 2>&1 && nix --version >/dev/null 2>&1; then
     echo "Nix is already installed:"
     nix --version
     echo "Skipping installation."
-    exit 0
+else
+    echo "Downloading Determinate Systems Nix installer..."
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+      sh -s -- install linux --init none --determinate --no-confirm
+
+    sudo chown -R vscode:vscode /nix
+
+    echo "Nix installation complete."
+
+    echo "Installing flake configuration..."
+    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+    cd "$SCRIPT_DIR"
+    nix profile add .
+    echo "Flake configuration installed."
 fi
 
-echo "Downloading Determinate Systems Nix installer..."
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
-  sh -s -- install linux --init none --determinate --no-confirm
-
-sudo chown -R vscode:vscode /nix
-
-echo "Nix installation complete."
-
-echo "Installing flake configuration..."
-source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-
 cd "$SCRIPT_DIR"
-nix profile add .
-echo "Flake configuration installed."
-
-echo "Setting up oh-my-zsh integration..."
+echo "Setting up oh-my-zsh integration and starting Herdr..."
 nix run .#setup-nix-zsh
-echo "oh-my-zsh setup complete."
+echo "Workspace setup complete."

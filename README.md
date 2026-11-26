@@ -1,5 +1,14 @@
 # Coder Dot Files
 
+## Coder Startup
+
+Coder runs [install.sh](install.sh) on each workspace boot. It installs Nix and
+the tool profile when needed, then always runs `nix run .#setup-nix-zsh` to
+refresh shell configuration, update Herdr's Claude integration, and start the
+Herdr server if it is not already running. Linux `setsid` and `nohup` must be
+available. Claude conversations resume when a Herdr client attaches. If present,
+`~/.config/herdr/herdr-inflight.py` is also run with `resume` after server startup.
+
 ## Codespaces + Determinate Nix
 
 This repo uses the Determinate Systems installer in [install-nix.sh](.devcontainer/scripts/install-nix.sh) for Codespaces bootstrap:
