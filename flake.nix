@@ -132,6 +132,7 @@
               claude-code
               codex
               delta
+              emacs-nox
               herdr.packages.${system}.default
               neovim
               pgcli
